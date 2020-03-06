@@ -1,4 +1,4 @@
-import math
+from math import sin, cos, asin, sqrt, pi
 
 class Object:
 	def __init__(self, x, y, height, width, name="object"):
@@ -6,6 +6,8 @@ class Object:
 		self.width, self.height = width, height
 		self.alpha = 0
 		self.name = name
+		self.d = sqrt(height**2 + width**2)
+		self.gamma = asin(width/self.d)
 	
 	def get_corners_unrotated(self):
 		return [(self.x+self.width//2, self.y-self.height//2),
@@ -14,7 +16,13 @@ class Object:
 				(self.x-self.width//2, self.y-self.height//2)]
 	
 	def get_corners(self):
-		return self.get_corners_unrotated() #Ádám, ezt a sort töröld ki
+		angle = self.alpha
+		gamma = self.gamma
+		A = (self.x + (self.d/2)*cos(angle+gamma), self.y + (self.d/2)*sin(angle+gamma))
+		B = (self.x + (self.d/2)*cos(angle-gamma), self.y + (self.d/2)*sin(angle-gamma))
+		C = (self.x + (self.d/2)*cos(angle+gamma-pi), self.y + (self.d/2)*sin(angle+gamma-pi))
+		D = (self.x + (self.d/2)*cos(angle-gamma+pi), self.y + (self.d/2)*sin(angle-gamma+pi))
+		return [A, B, C, D]
 	
 	def rotate(self, deg):
 		self.alpha = (self.alpha + deg) % 360
