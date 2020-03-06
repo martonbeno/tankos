@@ -1,22 +1,24 @@
 import pygame
-from Object import *
+from Tank import Tank
+from Bullet import Bullet
 from colors import *
 
-o1 = Object(400, 400, 100, 20) #center_x, center_y, height, width
+pygame.init()
+now = pygame.time.get_ticks #number of milliseconds passed from start of the game
+
+o1 = Tank(400, 400, born=now(), color="green") #center_x, center_y
 objects = [o1]
 
-
-
-pygame.init()
 
 screen = pygame.display.set_mode((800,600))
 pygame.display.set_caption("tankos játék")
 
-clock = pygame.time.Clock()
 
+bullet_speed = 10
 move_speed = 6
-rotate_speed = 2
+rotate_speed = .1
 
+clock = pygame.time.Clock()
 run = True
 
 while run:
@@ -26,25 +28,39 @@ while run:
 			run = False
 	
 	buttons_pressed = pygame.key.get_pressed()
-
+	
+	#exit -----------------------------
 	if buttons_pressed[pygame.K_ESCAPE]:
-		run = False	
+		run = False
+	
+	#debug ----------------------------
+	if buttons_pressed[pygame.K_SPACE]:
+		[print(o) for o in objects]
+	
+	#move -----------------------------
 	if buttons_pressed[pygame.K_UP]:
-		o1.move("up", move_speed)
+		o1.move("forward", move_speed)
 	if buttons_pressed[pygame.K_DOWN]:
-		o1.move("down", move_speed)
+		o1.move("backwards", move_speed)
 	if buttons_pressed[pygame.K_RIGHT]:
 		o1.rotate(rotate_speed)
 	if buttons_pressed[pygame.K_LEFT]:
 		o1.rotate(-rotate_speed)
 	
-	if buttons_pressed[pygame.K_SPACE]:
-		[print(o) for o in objects]
+	#shoot ----------------------------
+	if buttons_pressed[pygame.K_a]:
+		if o1.last_shot + o1.load_time < now(): # if the tank is loaded
+			objects.append(o1.shoot(now()))
 
-	screen.fill((255,255,255))
+	#actions --------------------------
+	for object in objects:
+		if object.type == "bullet":
+			object.move("forward", bullet_speed)
 	
+	#draw -----------------------------
+	screen.fill(colors["white"])
 	for o in objects:
-		pygame.draw.polygon(screen, BLACK, o.get_corners())
+		pygame.draw.polygon(screen, colors[o.color], o.get_corners())
 	
 	pygame.display.update()
 
