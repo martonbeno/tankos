@@ -44,7 +44,3 @@ class Rectangle:
 			self.get_corners(),
 			self.born
 		)
-
-
-if __name__ == "__main__":
-	o = Rectangle((100,100), 20, 50)
