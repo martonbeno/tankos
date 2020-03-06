@@ -14,4 +14,7 @@ class Tank(Rectangle):
 	
 	def shoot(self, time):
 		self.last_shot = time
-		return Bullet(x=self.x, y=self.y, angle=self.angle, born=time)
+		
+		bullet_pos = self.x, self.y
+		
+		return Bullet(x=bullet_pos[0], y=bullet_pos[1], angle=self.angle, born=time)
