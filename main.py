@@ -35,7 +35,7 @@ while run:
 	
 	#debug ----------------------------
 	if buttons_pressed[pygame.K_SPACE]:
-		[print(o) for o in objects]
+		[print(object) for object in objects]
 	
 	#move -----------------------------
 	if buttons_pressed[pygame.K_UP]:
@@ -52,15 +52,15 @@ while run:
 		if o1.last_shot + o1.load_time < now(): # if the tank is loaded
 			objects.append(o1.shoot(now()))
 
-	#actions --------------------------
+	#automatic actions ----------------
 	for object in objects:
-		if object.type == "bullet":
+		if object.type is "bullet":
 			object.move("forward", bullet_speed)
 	
 	#draw -----------------------------
 	screen.fill(colors["white"])
-	for o in objects:
-		pygame.draw.polygon(screen, colors[o.color], o.get_corners())
+	for object in objects:
+		pygame.draw.polygon(screen, colors[object.color], object.get_corners())
 	
 	pygame.display.update()
 
