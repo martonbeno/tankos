@@ -1,8 +1,8 @@
-from Rectangle import Rectangle
-from Bullet import Bullet
+from Rectangle import *
+from Bullet import *
 
 TANK_WIDTH = 50
-TANK_HEIGHT = 100
+TANK_HEIGHT = 75
 TANK_LOAD_TIME = 1000 #milliseconds
 
 class Tank(Rectangle):
@@ -15,6 +15,9 @@ class Tank(Rectangle):
 	def shoot(self, time):
 		self.last_shot = time
 		
-		bullet_pos = self.x, self.y
+		bx = self.x + cos(self.angle)*(TANK_HEIGHT + BULLET_HEIGHT)/2
+		by = self.y + sin(self.angle)*(TANK_HEIGHT + BULLET_HEIGHT)/2
+		
+		bullet_pos = bx, by
 		
 		return Bullet(x=bullet_pos[0], y=bullet_pos[1], angle=self.angle, born=time)

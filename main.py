@@ -9,10 +9,11 @@ now = pygame.time.get_ticks #number of milliseconds passed from start of the gam
 o1 = Tank(400, 400, born=now(), color="green") #center_x, center_y
 objects = [o1]
 
+W = 800
+H = 600
 
-screen = pygame.display.set_mode((800,600))
+screen = pygame.display.set_mode((W,H))
 pygame.display.set_caption("tankos játék")
-
 
 bullet_speed = 10
 move_speed = 6
@@ -51,16 +52,26 @@ while run:
 	if buttons_pressed[pygame.K_a]:
 		if o1.last_shot + o1.load_time < now(): # if the tank is loaded
 			objects.append(o1.shoot(now()))
-
+	
+	#bullet bounce on walls--------------------
+	for object in objects:
+		if object.type is "bullet" and (object.x > W or object.x < 0):
+			object.bounce("horizontal")
+		if object.type is "bullet" and (object.y > H or object.y < 0):
+			object.bounce("vertical")
+	
 	#automatic actions ----------------
 	for object in objects:
 		if object.type is "bullet":
-			object.move("forward", bullet_speed)
+			object.bullet_move()
 	
 	#draw -----------------------------
 	screen.fill(colors["white"])
 	for object in objects:
-		pygame.draw.polygon(screen, colors[object.color], object.get_corners())
+		if object.type is "bullet":
+			pygame.draw.ellipse(screen, colors[object.color], (object.x, object.y, object.width, object.height))
+		else:
+			pygame.draw.polygon(screen, colors[object.color], object.get_corners())
 	
 	pygame.display.update()
 
