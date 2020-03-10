@@ -1,11 +1,11 @@
-from Rectangle import *
+from Object import *
 from Bullet import *
 
 TANK_WIDTH = 50
 TANK_HEIGHT = 75
 TANK_LOAD_TIME = 1000 #milliseconds
 
-class Tank(Rectangle):
+class Tank(Object):
 	def __init__(self, x, y, born, color="black"):
 		super().__init__(x, y, TANK_WIDTH, TANK_HEIGHT, born=born, color=color)
 		self.type = "tank"
