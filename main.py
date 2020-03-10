@@ -1,7 +1,9 @@
 import pygame
 from Tank import Tank
 from Bullet import Bullet
+from Wall import Wall
 from colors import *
+from random import randint
 
 pygame.init()
 now = pygame.time.get_ticks #number of milliseconds passed from start of the game
@@ -9,10 +11,16 @@ now = pygame.time.get_ticks #number of milliseconds passed from start of the gam
 o1 = Tank(400, 400, born=now(), color="green") #center_x, center_y
 objects = [o1]
 
-W = 800
-H = 600
+W = 12
+H = 10
+cell = 70
 
-screen = pygame.display.set_mode((W,H))
+walls = []
+for i in range(W):
+	for j in range(H):
+		walls.append(Wall(i*cell, j*cell, (False, False, False, False)))
+
+screen = pygame.display.set_mode((W*cell,H*cell))
 pygame.display.set_caption("tankos játék")
 
 bullet_speed = 10
@@ -72,6 +80,13 @@ while run:
 			pygame.draw.ellipse(screen, colors[object.color], (object.x, object.y, object.width, object.height))
 		else:
 			pygame.draw.polygon(screen, colors[object.color], object.get_corners())
+	
+	for wall in walls:
+		for side in wall.get_sides():
+			pygame.draw.rect(screen, (0,0,0), (side.x, side.y, side.width, side.height))
+			
+	'''for side in walls[17].get_sides():
+		pygame.draw.rect(screen, (0,0,0), (side.x, side.y, side.width, side.height))'''
 	
 	pygame.display.update()
 
