@@ -26,6 +26,7 @@ pygame.display.set_caption("tankos játék")
 bullet_speed = 10
 move_speed = 6
 rotate_speed = .1
+max_bullets_per_tank = 5
 
 clock = pygame.time.Clock()
 run = True
@@ -46,6 +47,12 @@ while run:
 	if buttons_pressed[pygame.K_SPACE]:
 		[print(object) for object in objects]
 	
+	#kill the old --------------------
+	for object in objects:
+		if object.is_alive and object.born + object.lifespan < now():
+			object.kill()
+			objects.remove(object)
+	
 	#move -----------------------------
 	if buttons_pressed[pygame.K_UP]:
 		o1.move("forward", move_speed)
@@ -59,7 +66,8 @@ while run:
 	#shoot ----------------------------
 	if buttons_pressed[pygame.K_a]:
 		if o1.last_shot + o1.load_time < now(): # if the tank is loaded
-			objects.append(o1.shoot(now()))
+			if len([o for o in objects if o.type == "bullet" and o.tank == o1]) < max_bullets_per_tank:
+				objects.append(o1.shoot(now()))
 	
 	#bullet bounce on walls--------------------
 	for object in objects:

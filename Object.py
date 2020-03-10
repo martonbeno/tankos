@@ -1,4 +1,4 @@
-from math import sin, cos, asin, sqrt, pi
+from math import sin, cos, asin, sqrt, pi, inf
 
 class Object:
 	def __init__(self, x, y, width, height, born, angle=0, color="black", name="Object"):
@@ -11,6 +11,12 @@ class Object:
 		self.d = sqrt(height**2 + width**2)
 		self.gamma = asin(width/self.d)
 		self.type = None
+		self.is_alive = True
+		self.lifespan = inf
+	
+	def kill(self):
+		self.is_alive = False
+		print("au meghaltam")
 	
 	def get_corners(self):
 		angle = self.angle
