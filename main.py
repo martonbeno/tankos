@@ -4,6 +4,7 @@ from Bullet import Bullet
 from Wall import Wall
 from colors import *
 from random import randint
+import functions
 
 pygame.init()
 now = pygame.time.get_ticks #number of milliseconds passed from start of the game
@@ -13,7 +14,7 @@ objects = [o1]
 
 W = 12
 H = 10
-cell = 70
+cell = 100
 
 walls = []
 for i in range(W):
@@ -68,13 +69,21 @@ while run:
 		if o1.last_shot + o1.load_time < now(): # if the tank is loaded
 			if len([o for o in objects if o.type == "bullet" and o.tank == o1]) < max_bullets_per_tank:
 				objects.append(o1.shoot(now()))
+		
 	
-	#bullet bounce on walls--------------------
+	#bullet bounce on walls------------
 	for object in objects:
-		if object.type is "bullet" and (object.x > W or object.x < 0):
+		if object.type is "bullet" and (object.x > W*cell or object.x < 0):
 			object.bounce("horizontal")
-		if object.type is "bullet" and (object.y > H or object.y < 0):
+		if object.type is "bullet" and (object.y > H*cell or object.y < 0):
 			object.bounce("vertical")
+			
+	#collision
+	for object in objects:
+		if o1.collide(object) and object.is_alive:
+			o1.kill()
+			object.kill()
+			objects.remove(object)		
 	
 	#automatic actions ----------------
 	for object in objects:
@@ -88,6 +97,9 @@ while run:
 			pygame.draw.ellipse(screen, colors[object.color], (object.x, object.y, object.width, object.height))
 		else:
 			pygame.draw.polygon(screen, colors[object.color], object.get_corners())
+			'''tank1 = pygame.image.load(o1.image_file)
+			screen.blit(tank1, (o1.x + o1.width/2, o1.y + o1.height/2))
+			pygame.transform.rotate(tank1, o1.angle)'''
 	
 	for wall in walls:
 		for side in wall.get_sides():

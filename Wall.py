@@ -1,6 +1,6 @@
 from Object import Object
 
-WALL_LENGTH = 70
+WALL_LENGTH = 100
 WALL_WIDTH = 5
 
 class Wall:
@@ -8,6 +8,7 @@ class Wall:
 		self.x = x
 		self.y = y
 		self.sides = sides # sides expects a list with 4 boolean variables
+		self.type = "wall"
 		
 	def get_sides(self):
 		walls = []

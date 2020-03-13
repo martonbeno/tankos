@@ -1,4 +1,5 @@
-from math import sin, cos, asin, sqrt, pi, inf
+from math import sin, cos, asin, sqrt, pi, inf, fabs
+from functions import *
 
 class Object:
 	def __init__(self, x, y, width, height, born, angle=0, color="black", name="Object"):
@@ -26,6 +27,8 @@ class Object:
 		C = (self.x + (self.d/2)*cos(angle+gamma-pi), self.y + (self.d/2)*sin(angle+gamma-pi))
 		D = (self.x + (self.d/2)*cos(angle-gamma+pi), self.y + (self.d/2)*sin(angle-gamma+pi))
 		return [A, B, C, D]
+		
+	
 	
 	def rotate(self, deg):
 		self.angle = (self.angle + deg) % (2*pi)
@@ -50,3 +53,28 @@ class Object:
 			self.get_corners(),
 			self.born
 		)
+		
+	def collide(self, other):
+		if self.type == "bullet":
+			if other.type == "tank":
+				corners = other.get_corners()
+				point = (self.x, self.y)
+				a = (corners[0], corners[1])
+				b = (corners[1], corners[2])
+				c = (corners[2], corners[3])
+				d = (corners[3], corners[0])
+				return line_point_collision(a, point) or line_point_collision(b, point)\
+					or line_point_collision(c, point) or line_point_collision(d, point)
+					
+		elif self.type == "tank":
+			if other.type == "bullet":
+				corners = self.get_corners()
+				point = (other.x, other.y)
+				a = (corners[0], corners[1])
+				b = (corners[1], corners[2])
+				c = (corners[2], corners[3])
+				d = (corners[3], corners[0])
+				return line_point_collision(a, point) or line_point_collision(b, point) or line_point_collision(c, point) or line_point_collision(d, point)
+			elif other.type == "tank":
+				return False
+		
