@@ -2,16 +2,17 @@ from math import sin, cos, asin, sqrt, pi, inf, fabs
 from functions import *
 
 class Object:
-	def __init__(self, x, y, width, height, born, angle=0, color="black", name="Object"):
+	def __init__(self, x, y, width, height, born, angle=0, color="black", name="Object", type=None):
 		self.x, self.y = x, y
 		self.width, self.height = width, height
 		self.born = born #time it was created (in milliseconds)
 		self.angle = angle
 		self.color = color
 		self.name = name
+		self.type = type
+		
 		self.d = sqrt(height**2 + width**2)
 		self.gamma = asin(width/self.d)
-		self.type = None
 		self.is_alive = True
 		self.lifespan = inf
 	
@@ -53,28 +54,7 @@ class Object:
 			self.get_corners(),
 			self.born
 		)
-		
+	
+	#abstract method (only specified in inherited classes)
 	def collide(self, other):
-		if self.type == "bullet":
-			if other.type == "tank":
-				corners = other.get_corners()
-				point = (self.x, self.y)
-				a = (corners[0], corners[1])
-				b = (corners[1], corners[2])
-				c = (corners[2], corners[3])
-				d = (corners[3], corners[0])
-				return line_point_collision(a, point) or line_point_collision(b, point)\
-					or line_point_collision(c, point) or line_point_collision(d, point)
-					
-		elif self.type == "tank":
-			if other.type == "bullet":
-				corners = self.get_corners()
-				point = (other.x, other.y)
-				a = (corners[0], corners[1])
-				b = (corners[1], corners[2])
-				c = (corners[2], corners[3])
-				d = (corners[3], corners[0])
-				return line_point_collision(a, point) or line_point_collision(b, point) or line_point_collision(c, point) or line_point_collision(d, point)
-			elif other.type == "tank":
-				return False
-		
+		pass

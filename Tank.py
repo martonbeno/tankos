@@ -1,5 +1,6 @@
 from Object import *
 from Bullet import *
+from functions import *
 
 TANK_WIDTH = 50
 TANK_HEIGHT = 75
@@ -24,3 +25,20 @@ class Tank(Object):
 		bullet_pos = bx, by
 		
 		return Bullet(x=bullet_pos[0], y=bullet_pos[1], angle=self.angle, born=time, tank=self)
+	
+	
+	# @Override
+	def collide(self, other):
+		if other.type == "bullet":
+			corners = self.get_corners()
+			point = (other.x, other.y)
+			a = (corners[0], corners[1])
+			b = (corners[1], corners[2])
+			c = (corners[2], corners[3])
+			d = (corners[3], corners[0])
+			return line_point_collision(a, point) or line_point_collision(b, point) or line_point_collision(c, point) or line_point_collision(d, point)
+		
+		elif other.type == "tank":
+			return False
+		
+		return False

@@ -1,25 +1,30 @@
 import pygame
 from Tank import Tank
 from Bullet import Bullet
-from Wall import Wall
+from Wall import *
 from colors import *
 from random import randint
 import functions
 
+W = 12
+H = 10
+cell = 50
+
+
 pygame.init()
 now = pygame.time.get_ticks #number of milliseconds passed from start of the game
 
+objects = []
+
 o1 = Tank(400, 400, born=now(), color="green") #center_x, center_y
-objects = [o1]
 
-W = 12
-H = 10
-cell = 100
+objects.append(o1)
 
-walls = []
 for i in range(W):
 	for j in range(H):
-		walls.append(Wall(i*cell, j*cell, (False, False, False, False)))
+		for wallside in new_wall(i*cell, j*cell, [0,0,0,0]):
+			objects.append(wallside)
+
 
 screen = pygame.display.set_mode((W*cell,H*cell))
 pygame.display.set_caption("tankos játék")
@@ -78,12 +83,12 @@ while run:
 		if object.type is "bullet" and (object.y > H*cell or object.y < 0):
 			object.bounce("vertical")
 			
-	#collision
-	for object in objects:
-		if o1.collide(object) and object.is_alive:
+	#collision -------------------------
+	for i, object in enumerate(objects):
+		if o1.collide(object) and object.type == "bullet":
 			o1.kill()
 			object.kill()
-			objects.remove(object)		
+			objects.remove(object)
 	
 	#automatic actions ----------------
 	for object in objects:
@@ -100,13 +105,6 @@ while run:
 			'''tank1 = pygame.image.load(o1.image_file)
 			screen.blit(tank1, (o1.x + o1.width/2, o1.y + o1.height/2))
 			pygame.transform.rotate(tank1, o1.angle)'''
-	
-	for wall in walls:
-		for side in wall.get_sides():
-			pygame.draw.rect(screen, (0,0,0), (side.x, side.y, side.width, side.height))
-			
-	'''for side in walls[17].get_sides():
-		pygame.draw.rect(screen, (0,0,0), (side.x, side.y, side.width, side.height))'''
 	
 	pygame.display.update()
 

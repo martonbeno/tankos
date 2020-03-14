@@ -1,5 +1,6 @@
 from Object import Object
 from math import cos, sin
+from functions import *
 
 BULLET_WIDTH = 10
 BULLET_HEIGHT = 10
@@ -24,3 +25,16 @@ class Bullet(Object):
 			self.vx *= -1
 		elif dir == "vertical":
 			self.vy *= -1
+	
+	# @Override
+	def collide(self, other):
+		if other.type == "tank":
+			corners = other.get_corners()
+			point = (self.x, self.y)
+			a = (corners[0], corners[1])
+			b = (corners[1], corners[2])
+			c = (corners[2], corners[3])
+			d = (corners[3], corners[0])
+			return line_point_collision(a, point) or line_point_collision(b, point)\
+				or line_point_collision(c, point) or line_point_collision(d, point)
+		return False
