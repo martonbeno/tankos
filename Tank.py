@@ -2,8 +2,8 @@ from Object import *
 from Bullet import *
 from functions import *
 
-TANK_WIDTH = 50
 TANK_HEIGHT = 75
+TANK_WIDTH = 50
 TANK_LOAD_TIME = 1000 #milliseconds
 TANK_IMAGE_FILE = "red.png"
 
@@ -19,12 +19,12 @@ class Tank(Object):
 	def shoot(self, time):
 		self.last_shot = time
 		
-		bx = self.x + cos(self.angle)*(TANK_HEIGHT + BULLET_HEIGHT + 2)/2
-		by = self.y + sin(self.angle)*(TANK_HEIGHT + BULLET_HEIGHT + 2)/2
+		bx = self.x + cos(self.angle)*(self.height + BULLET_WIDTH + 2)/2
+		by = self.y + sin(self.angle)*(self.height + BULLET_WIDTH + 2)/2
 		
 		bullet_pos = bx, by
 		
-		return Bullet(x=bullet_pos[0], y=bullet_pos[1], angle=self.angle, born=time, tank=self)
+		return Bullet(x=bx, y=by, angle=self.angle, born=time, tank=self)
 	
 	
 	# @Override

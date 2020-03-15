@@ -11,7 +11,7 @@ class Object:
 		self.name = name
 		self.type = type
 		
-		self.d = sqrt(height**2 + width**2)
+		self.d = sqrt(width**2 + height**2)
 		self.gamma = asin(width/self.d)
 		self.is_alive = True
 		self.lifespan = inf
@@ -45,11 +45,13 @@ class Object:
 			raise ValueError("dir has to be one of these: forward backwards\ncan not be " + dir)
 	
 	def __str__(self):
-		return "{}\n---\ntype:{}\nx:{}\ny:{}\nself.angle:{}\ncorners:{}\nborn:{}".format(
+		return "{}\n---\ntype:{}\nx:{}\ny:{}\nwidth:{}\nheight:{}\nself.angle:{}\ncorners:{}\nborn:{}".format(
 			self.name,
 			self.type,
 			self.x,
 			self.y,
+			self.width,
+			self.height,
 			self.angle,
 			self.get_corners(),
 			self.born

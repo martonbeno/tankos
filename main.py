@@ -17,14 +17,25 @@ now = pygame.time.get_ticks #number of milliseconds passed from start of the gam
 objects = []
 
 o1 = Tank(400, 400, born=now(), color="green") #center_x, center_y
-
 objects.append(o1)
+
+walls = []
 
 for i in range(W):
 	for j in range(H):
 		for wallside in new_wall(i*cell, j*cell, [0,0,0,0]):
-			objects.append(wallside)
+			walls.append(wallside)
 
+for wallside in new_wall(3*cell, 3*cell, [1,0,0,1]):
+	walls.append(wallside)
+for wallside in new_wall(3*cell, 4*cell, [0,1,0,1]):
+	walls.append(wallside)
+for wallside in new_wall(2*cell, 4*cell, [1,1,1,1]):
+	walls.append(wallside)
+for wallside in new_wall(2*cell, 3*cell, [0,0,1,1]):
+	walls.append(wallside)
+
+objects = objects + walls
 
 screen = pygame.display.set_mode((W*cell,H*cell))
 pygame.display.set_caption("tankos játék")
@@ -84,11 +95,14 @@ while run:
 			object.bounce("vertical")
 			
 	#collision -------------------------
-	for i, object in enumerate(objects):
+	for object in objects:
 		if o1.collide(object) and object.type == "bullet":
 			o1.kill()
 			object.kill()
 			objects.remove(object)
+		for wall in walls:
+			if object.type is "bullet" and object.collide(wall):
+				object.bounce(wall.allignment)
 	
 	#automatic actions ----------------
 	for object in objects:
@@ -99,11 +113,11 @@ while run:
 	screen.fill(colors["white"])
 	for object in objects:
 		if object.type is "bullet":
-			pygame.draw.ellipse(screen, colors[object.color], (object.x, object.y, object.width, object.height))
+			pygame.draw.ellipse(screen, colors[object.color], (object.x, object.y, object.height, object.width))
 		else:
 			pygame.draw.polygon(screen, colors[object.color], object.get_corners())
 			'''tank1 = pygame.image.load(o1.image_file)
-			screen.blit(tank1, (o1.x + o1.width/2, o1.y + o1.height/2))
+			screen.blit(tank1, (o1.x + o1.height/2, o1.y + o1.width/2))
 			pygame.transform.rotate(tank1, o1.angle)'''
 	
 	pygame.display.update()
